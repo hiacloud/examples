@@ -1,53 +1,84 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Demo</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width">
-<base href=".">
-<link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
-<script type="text/javascript" src="./jquery.min.js"></script>
-<script type="text/javascript" src="./bootstrap.min.js"></script>
-<script type="text/javascript" src="./js.cookie.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Demo</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <base href=".">
+    <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
+    <script type="text/javascript" src="./jquery.min.js"></script>
+    <script type="text/javascript" src="./bootstrap.min.js"></script>
+    <script type="text/javascript" src="./js.cookie.js"></script>
+
+
+    <!--Register Google Api-->
+    <script type="text/javascript" src="./client.js?onload=handleClientLoad"></script>
+
+
 <body>
-	<h1>Login</h1>
-	<div class="container unauthenticated">
-		Login With HiaCloud UAA: <a href="http://localhost:489/api/login">click here</a>
-	</div>
-	<div class="container authenticated" style="display: none">
-		Logged in as: <span id="user"></span>
-		<div>
-			<button onclick="logout()" class="btn btn-primary">Logout</button>
-		</div>
-	</div>
-	<script type="text/javascript">
-	    $.ajaxSetup({
-	    	beforeSend : function(xhr, settings) {
-	    	  if (settings.type == 'POST' || settings.type == 'PUT'
-	    	      || settings.type == 'DELETE') {
-	    	    if (!(/^http:.*/.test(settings.url) || /^https:.*/
-	    	        .test(settings.url))) {
-	    	      // Only send the token to relative URLs i.e. locally.
-	    	      xhr.setRequestHeader("X-XSRF-TOKEN",
-	    	          Cookies.get('XSRF-TOKEN'));
-	    	    }
-	    	  }
-	    	}
-    	}); 
-          $.get("/api/user", function(data) {
-            $("#user").html(data.name);
-            $(".unauthenticated").hide()
-            $(".authenticated").show()
-          });
-          var logout = function() {
-              $.post("/api/logout", function() {
-                $("#user").html('');
-                $(".unauthenticated").show();
-                $(".authenticated").hide();
-              })
-              return true;
-            }
-        </script>
+<h1>Login</h1>
+<div class="container unauthenticated">
+    Login With HiaCloud UAA:
+    <button id="login">click here</button>
+</div>
+<div class="container authenticated" style="display: none">
+    Logged in as: <span id="user"></span>
+    <div>
+        <button id="logout" class="btn btn-primary">Logout</button>
+    </div>
+</div>
+<script type="text/javascript">
+    var appID = "zhuqinghua";
+    var hash;
+    function fbLogin() {
+        var path = 'http://192.168.66.158:18080/oauth/authorize?';
+        var queryParams = ['client_id=' + appID,
+            'redirect_uri=' + window.location,
+            'response_type=token'];
+        var query = queryParams.join('&');
+        var url = path + query;
+        window.location.replace(url);
+    }
+    function checkFbHashLogin() {
+        if (window.location.hash.length > 3) {
+            hash = window.location.hash.substring(1);
+            if (hash.split('=')[0] == 'access_token') {
+                var path = "http://localhost:489/api/user?";
+                var url = path + hash;
 
-</body></html>
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: url,
+                    success: function (data) {
+                        displayUser(data);
+                    }
+                });
+            }
+        }
+    }
+
+    function displayUser(data) {
+        $("#user").html(data.name);
+        $(".unauthenticated").hide()
+        $(".authenticated").show()
+    }
+
+    checkFbHashLogin();
+
+    $('#login').click(function () {
+        fbLogin();
+    });
+    $('#logout').click(function () {
+        hash = undefined;
+        $("#user").html("");
+        $(".unauthenticated").show()
+        $(".authenticated").hide()
+    });
+</script>
+
+</body>
+</html>
