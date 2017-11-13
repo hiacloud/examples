@@ -12,4 +12,5 @@ Hiacloud UAA Examples
 ## 微服务之间调用
 * spring-boot-ms/spring-boot-ms1
 * spring-boot-ms/spring-boot-ms2
+[README](spring-boot-ms/README.MD)
 
