@@ -9,3 +9,7 @@ Hiacloud UAA Examples
 * spring-boot-uaa-ui
 
 
+## 微服务之间调用
+* spring-boot-ms/spring-boot-ms1
+* spring-boot-ms/spring-boot-ms2
+
