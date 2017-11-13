@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>spring-boot-uaa</name>
-	<description>This is a OAuth2 examle</decription>
+	<description>This is a OAuth2 examle</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
