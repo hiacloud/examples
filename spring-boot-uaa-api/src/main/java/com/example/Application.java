@@ -15,11 +15,7 @@
  */
 package com.example;
 
-import java.io.IOException;
 import java.security.Principal;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,18 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Application{
 
-	@RequestMapping("/")
-	public void root(HttpServletRequest req, HttpServletResponse resp) {
-		try {
-			resp.sendRedirect("http://localhost:489");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	@RequestMapping("/user")
 	public Principal user(Principal principal) {
 		return principal;
 	}
+	
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
