@@ -50,13 +50,13 @@
        });         
     }
     function getUser() {
-		var url = "/api/user?";
+		var url = "/api/user";
 		$.ajax({
 			url: url,
 			dataType: "json",
 			type: "GET",
 			headers:{
-				Authorization: 'beaerer '+ token
+				Authorization: 'bearer '+ token
 			},			
 			success: function (data) {
 				displayUser(data);
